@@ -62,12 +62,14 @@ class GUI:
         self.config = config
         
         
+        self.show_record_option = False
         self.record_conversation = False
         self.is_creating_query = False
         #self.start_time = time.time()
         self.conversation_folder = conversation_folder #if recording, all conversation metadata will be stored here
         if os.path.exists(self.conversation_folder):
-            self.record_conversation = True
+            #self.record_conversation = True
+            self.show_record_option = True
         self.chat_folder = None
         ###########################
  
@@ -257,6 +259,16 @@ class GUI:
                                rely=0.825)
  
        
+        # make a recording checkbox
+        if self.show_record_option:
+            self.recordVar = IntVar()
+            self.recordCheckbutton = Checkbutton(self.labelBottom,text = 'record/add data to: '+self.conversation_folder,variable=self.recordVar, onvalue=1, offval=0,command=self.startStopRecording)
+            self.recordCheckbutton.place(relx=0.01,
+                                 rely=0.076,
+                                 relheight=0.02,
+                                 relwidth=0.98)
+
+        
         
         self.entry_text = StringVar()
         self.entry_text.trace("w", lambda name, index,mode, var=self.entry_text: self.handle_entryMsg_typed())
@@ -315,7 +327,12 @@ class GUI:
         scrollbar.config(command=self.textCons.yview)
  
         self.textCons.config(state=DISABLED)
- 
+    
+    def startStopRecording(self):
+        if self.recordVar.get() == 1:
+            self.record_conversation = True
+        if self.recordVar.get() == 0:
+            self.record_conversation = False
  
     def create_chat_subfolder(self):
         chat_number = 0
