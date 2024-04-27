@@ -1,0 +1,7 @@
+opencv-python
+pillow
+matplotlib
+facenet-pytorch
+tk
+tkVideoUtils
+Pillow==9.5.0
