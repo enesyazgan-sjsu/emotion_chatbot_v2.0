@@ -6,6 +6,7 @@ import socket
 import subprocess
 from tkinter import *
 from threading import *
+from PIL import Image, ImageTk
 from collections import Counter
 from configparser import ConfigParser 
 
@@ -71,6 +72,21 @@ class GUI:
             #self.record_conversation = True
             self.show_record_option = True
         self.chat_folder = None
+        
+        
+        self.icon_folder = "./icons/"
+        self.icon_dict = {"none": self.icon_folder+'none.png',
+            'neutral':self.icon_folder+'neutral.png',
+            'happy':self.icon_folder+ 'happy.png', 
+            'sad':self.icon_folder+ 'sad.png',
+            'surprise':self.icon_folder+'surprise.png',
+            'fear':self.icon_folder+'fear.png',
+            'disgust':self.icon_folder+'disgust.png',
+            'angry':self.icon_folder+'angry.png'}
+        self.fer_path = self.icon_dict["none"]
+        self.fer_image = None
+        
+        
         ###########################
  
         # chat window which is currently hidden
@@ -174,6 +190,16 @@ class GUI:
         self.Window.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.Window.mainloop()
     
+    def set_fer_image(self, first=False):
+        fer_key = str(self.fer_result).lower()
+        if fer_key in list(self.icon_dict.keys()):
+            self.fer_path = self.icon_dict[fer_key]
+        fer_image = Image.open(self.fer_path)
+        self.fer_image = ImageTk.PhotoImage(fer_image)
+        
+        if not first:
+            self.imageLabel.config(image=self.fer_image)
+    
     def on_closing(self):
         print("Converting conversation snippet frames to videos!")
         print("Please wait for script to finish!")
@@ -206,7 +232,8 @@ class GUI:
                 self.labelHead.config(text="Detected Emotion: " + str(self.fer_result))
             except Exception as e:
                 print(e)
-        print(self.fer_result)  
+        
+        self.set_fer_image()
         self.Window.after(10, self.getCurrentFER)  # reschedule event in 2 seconds
  
     
@@ -230,7 +257,7 @@ class GUI:
                                font="Helvetica 13 bold",
                                pady=5)
  
-        self.labelHead.place(relwidth=1)
+        self.labelHead.place(relwidth=1,relheight=.1)
         self.line = Label(self.Window,
                           width=450,
                           bg="#ABB2B9")
@@ -238,6 +265,18 @@ class GUI:
         self.line.place(relwidth=1,
                         rely=0.07,
                         relheight=0.012)
+
+        self.set_fer_image(first = True)
+        self.imageLabel = Label(self.Window,
+                               bg="#237828",
+                               fg="#EAECEE",
+                               image = self.fer_image
+                               )
+        self.imageLabel['bg']=self.imageLabel.master['bg']
+        self.imageLabel.place(relwidth=1,
+                             relx=0.0,
+                             rely=0.09, relheight = .1)
+        
  
         self.textCons = Text(self.Window,
                              width=20,
@@ -248,9 +287,9 @@ class GUI:
                              padx=5,
                              pady=5)
  
-        self.textCons.place(relheight=0.745,
+        self.textCons.place(relheight=0.60,
                             relwidth=1,
-                            rely=0.08)
+                            rely=0.2)
  
         self.labelBottom = Label(self.Window,
                                  bg="#ABB2B9",
