@@ -16,12 +16,12 @@ Updated evalGui.py
 - saves observerData in same format, but replaces timestamp with conversation_name+query-response-name
 - saves observerData in ./eval_data/ (created if doesnt exist)
 - option to hide query/response pairs created by self
+- eval_data files are distibguished by name of the reviewer/observer to prevent mixup
 
 user_preferences.ini
 - allows setting of user name, api key, and toggle record conversation on or off
 
 TODO:
-- make eval_data files  distibguished by name of the reviewer/observer to prevent mixup
 - train specialized FER models for Eric, Brandon, and Gurpreet
 - automate selection of FER model based on name in user_preferences.ini
 

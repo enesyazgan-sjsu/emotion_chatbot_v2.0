@@ -23,23 +23,17 @@ from configparser import ConfigParser
 def mkdir_if_dne(directory):
     if not os.path.exists(directory):
         os.mkdir(directory)  
-
-eval_data_folder = "./eval_data/"
-mkdir_if_dne(eval_data_folder)
-PATH_TO_OBSERVER_DATA = './eval_data/observerData.txt' # appends observer judgements to this file
-
-  
-        
+       
 # GUI_EVAL class for evaluation
 class GUI_EVAL:
-    def __init__(self, eval_list, chatWinWidth = 400, chatWinHeight = None, minHeight = 10, ratingScale = 5, \
+    def __init__(self, eval_list, eval_data_path, chatWinWidth = 400, chatWinHeight = None, minHeight = 10, ratingScale = 5, \
                  dataPath = None, observerDataPath = None):
         
         self.eval_list = eval_list
         self.current_eval_index = 0
         self.current_eval_entry = self.eval_list[self.current_eval_index]
         
-        self.observerDataPath = PATH_TO_OBSERVER_DATA 
+        self.observerDataPath = eval_data_path
         
         ## Window Attributes ###
         if chatWinHeight == None:
@@ -564,7 +558,13 @@ def main():
     
     eval_list = generate_eval_list(user_name, omit_self_from_eval=omit_self_from_eval)
     
-    evalWin = GUI_EVAL(eval_list)
+    eval_data_folder = "./eval_data/"
+    mkdir_if_dne(eval_data_folder)
+    eval_path= './eval_data/'+user_name+'_observerData.txt' # appends observer judgements to this file
+
+      
+    
+    evalWin = GUI_EVAL(eval_list, eval_path)
 
 if __name__ == "__main__":
     main()
