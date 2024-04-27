@@ -67,7 +67,7 @@ class GUI:
         self.is_creating_query = False
         #self.start_time = time.time()
         self.conversation_folder = conversation_folder #if recording, all conversation metadata will be stored here
-        if os.path.exists(self.conversation_folder):
+        if self.conversation_folder is not None and os.path.exists(self.conversation_folder):
             #self.record_conversation = True
             self.show_record_option = True
         self.chat_folder = None
@@ -178,7 +178,8 @@ class GUI:
         print("Converting conversation snippet frames to videos!")
         print("Please wait for script to finish!")
         self.send_videostream_off_command()
-        convert_frames_to_videos(self.conversation_folder)
+        if self.conversation_folder is not None:
+            convert_frames_to_videos(self.conversation_folder)
         self.Window.destroy()
         
     def beginChat(self, name, api_entry, skip_login=False):
@@ -575,7 +576,6 @@ def main():
         conversation_folder = None
         
     
-    
     port = 400
     host = socket.gethostname()
     
@@ -595,7 +595,7 @@ def main():
                 client = socket.socket(socket.AF_INET,
                                    socket.SOCK_STREAM)
                 client.connect((host, port))
-                
+
                 chat_app = GUI(client, config, config_filename, conversation_folder)
                 connect_success = True
                 
