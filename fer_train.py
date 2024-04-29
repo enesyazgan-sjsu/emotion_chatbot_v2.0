@@ -24,13 +24,13 @@ IMG_EXTENSIONS = (".jpg", ".jpeg", ".png", ".ppm", ".bmp", ".pgm", ".tif", ".tif
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--FER_path', type=str, default='./FER_Train_Dataset/', help='FER-DB dataset path.')
+    parser.add_argument('--FER_path', type=str, default='./Train_Datasets/all_dataset/', help='FER-DB dataset path.')
     parser.add_argument('--batch_size', type=int, default=16, help='Batch size.')
     parser.add_argument('--lr', type=float, default=5e-4, help='Initial learning rate for sgd.')
     parser.add_argument('--workers', default=1, type=int, help='Number of data loading workers.')
-    parser.add_argument('--epochs', type=int, default=256, help='Total training epochs.')
+    parser.add_argument('--epochs', type=int, default=150, help='Total training epochs.')
     parser.add_argument('--num_head', type=int, default=2, help='Number of attention head.')
-    parser.add_argument('--model_path', default = './checkpoints_ver2.0/FER_epoch53_acc0.8959_bacc0.8906.pth')
+    parser.add_argument('--model_path', default = './checkpoints_ver2.0/rafdb_epoch20_acc0.9204_bacc0.8617.pth')
     return parser.parse_args()
 
 class AttentionLoss(nn.Module):
@@ -183,7 +183,7 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
 
 class_names = ['Neutral', 'Happy', 'Sad', 'Surprise', 'Fear', 'Disgust', 'Angry']  
-def run_training(checkpoint_acc_thresh = 0.70):
+def run_training(checkpoint_acc_thresh = 0.77, model_name = ""):
     args = parse_args()
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -193,8 +193,8 @@ def run_training(checkpoint_acc_thresh = 0.70):
         torch.backends.cudnn.enabled = True
 
     model = DDAMNet(num_class=7,num_head=args.num_head)
-    #checkpoint = torch.load(args.model_path, map_location=device)
-    #model.load_state_dict(checkpoint['model_state_dict'])
+    checkpoint = torch.load(args.model_path, map_location=device)
+    model.load_state_dict(checkpoint['model_state_dict'])
     model.to(device)
 
     data_transforms = transforms.Compose([
@@ -353,7 +353,7 @@ def run_training(checkpoint_acc_thresh = 0.70):
                 torch.save({'iter': epoch,
                             'model_state_dict': model.state_dict(),
                              'optimizer_state_dict': optimizer.state_dict(),},
-                            os.path.join('checkpoints_ver2.0', "FER_epoch"+str(epoch)+"_acc"+str(acc)+"_bacc"+str(balanced_acc)+".pth"))
+                            os.path.join('checkpoints_ver2.0', model_name+"_FER_epoch"+str(epoch)+"_acc"+str(acc)+"_bacc"+str(balanced_acc)+".pth"))
                 tqdm.write('Model saved.')
                 
                 # Compute confusion matrix
@@ -361,11 +361,11 @@ def run_training(checkpoint_acc_thresh = 0.70):
                 np.set_printoptions(precision=2)
                 plt.figure(figsize=(10, 8))
                 # Plot normalized confusion matrix
-                plot_confusion_matrix(matrix, classes=class_names, normalize=True, title= 'FER-DB Confusion Matrix (acc: %0.2f%%)' %(acc*100))
+                plot_confusion_matrix(matrix, classes=class_names, normalize=True, title= model_name+'_FER-DB Confusion Matrix (acc: %0.2f%%)' %(acc*100))
                  
-                plt.savefig(os.path.join('checkpoints_ver2.0', "FER_epoch"+str(epoch)+"_acc"+str(acc)+"_bacc"+str(balanced_acc)+".png"))
+                plt.savefig(os.path.join('checkpoints_ver2.0', model_name+"_FER_epoch"+str(epoch)+"_acc"+str(acc)+"_bacc"+str(balanced_acc)+".png"))
                 plt.close()
         
 if __name__ == "__main__":        
-    run_training()
+    run_training(checkpoint_acc_thresh = 0.6, model_name="all")
     
