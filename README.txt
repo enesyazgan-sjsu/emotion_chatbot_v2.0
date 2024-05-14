@@ -1,5 +1,12 @@
 Emotion Chatbot v2.0
 
+install requirements.txt
+
+Run gui.py
+
+
+
+-----------------
 Updated gui.py
 - Begins recording conversation as soon as typing or speaking begins
 - Records observed FER values into list as query is being written. Majority emotion is picked when query is sent (unless majority emotion is Neutral, in which case it checks for any significant other FER and sends that if so)
@@ -20,8 +27,4 @@ Updated evalGui.py
 
 user_preferences.ini
 - allows setting of user name, api key, and toggle record conversation on or off
-
-TODO:
-- train specialized FER models for Eric, Brandon, and Gurpreet
-- automate selection of FER model based on name in user_preferences.ini
 
