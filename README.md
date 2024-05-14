@@ -4,6 +4,34 @@ SJSU 2024 Grad Project - Emotion Chatbot
 ## Summary
 - This system allows a user to communicate with a chatbot that has been enhanced with awareness of the user's emotions. It captures facial expressions, classifies their emotions, and augments user questions with the predicted emotion. This information is used to provide more relevant and sympathetic responses from the chatbot.
 
+Quick Install:
+Supported OS: Windows 10 & 11. 
+
+Installation steps:
+
+- Install Conda: https://docs.anaconda.com/free/miniconda/
+- conda create -n fer_gui python=3.8.9
+- conda activate fer_gui
+- install pytorch. View pytorch_installation.txt for options
+- pip install -r requirements.txt
+
+
+Running instructions:
+
+
+Prerequisite:
+- Obtain openAI API Key: https://openai.com/index/openai-api/
+- Save key to System environment variables or save to api_key in user_preferences.ini
+
+
+User Preferences INI:
+- set user_name field to preferred name
+- show_query_augmentation. Values: True, False. Toggles whether emotion based query augmentations are displayed or not.
+- record_conversation. Values: True, False. If true, clicking the checkbox at the bottom of the gui will record conversation data, until checkbox is toggled off.
+
+Usage:
+python gui.py
+
 ************************************
 # **Instructions: First-time Setup**
 ************************************
