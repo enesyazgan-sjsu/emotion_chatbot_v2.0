@@ -5,3 +5,6 @@ facenet-pytorch
 tk
 tkVideoUtils
 Pillow==9.5.0
+openai
+SpeechRecognition
+ffmpeg
