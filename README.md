@@ -150,3 +150,5 @@ self.useMultEAR = True (current default) will cause the system to add emotional 
 - Eric Mead
 - Brandon Winn
 - Enes Yazgan
+  
+Link to old Repository (v1.0): https://github.com/enesyazgan-sjsu/emotion-chatbot
